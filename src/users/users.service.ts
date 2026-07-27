@@ -4,6 +4,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
+import { validate as uuidValidate } from "uuid"
+import { BadRequestException } from '../exceptions/badRequest.exception';
+import { ResourceNotFoundException } from '../exceptions/notFound.exception';
+import { IDefaultResponse } from './response.interface';
 
 @Injectable()
 export class UsersService {
@@ -36,13 +40,45 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<UserEntity | null> {
-    return await this.usersRepository.findOneBy({ id });
+    if (!uuidValidate(id)) {
+      throw new BadRequestException({
+        message: 'Invalid parameter for identification',
+        action: 'Try again with correct parameter',
+      });
+    }
+
+    const foundUser = await this.usersRepository.findOneBy({ id });
+    if (!foundUser) {
+      throw new ResourceNotFoundException({
+        message: 'Not match data',
+        action: 'Ensure your passing valid parameters',
+      });
+    }
+    return foundUser;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<boolean> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<IDefaultResponse> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
+
+    if (!uuidValidate(id)) {
+      throw new BadRequestException({
+        message: 'Invalid parameter for identification',
+        action: 'Try again with correct parameter',
+      });
+    }
+
+    const foundUser = await this.usersRepository.findOneBy({ id });
+    if (!foundUser) {
+      throw new ResourceNotFoundException({
+        message: 'Not match data',
+        action: 'Ensure your passing valid parameters',
+      });
+    }
 
     try {
       const updatedUser = await queryRunner.manager.update(
@@ -51,10 +87,17 @@ export class UsersService {
         updateUserDto,
       );
 
+      await queryRunner.commitTransaction();
       if (updatedUser.affected && updatedUser.affected > 0) {
-        return true;
+        return {
+          message: 'User updated successfully',
+          action: 'You can now fetch the updated user data',
+        };
       }
-      return false;
+      return {
+        message: 'No changes were made to the user',
+        action: 'Ensure the update data is different from the existing data',
+      };
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
@@ -64,6 +107,21 @@ export class UsersService {
   }
 
   async remove(id: string): Promise<void> {
+    if (!uuidValidate(id)) {
+      throw new BadRequestException({
+        message: 'Invalid parameter for identification',
+        action: 'Try again with correct parameter',
+      });
+    }
+
+    const foundUser = await this.usersRepository.findOneBy({ id });
+    if (!foundUser) {
+      throw new ResourceNotFoundException({
+        message: 'Not match data',
+        action: 'Ensure your passing valid parameters',
+      });
+    }
+
     await this.usersRepository.delete(id);
   }
 }

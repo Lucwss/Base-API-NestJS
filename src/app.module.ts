@@ -8,6 +8,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { UserEntity } from './users/entities/user.entity';
+import { APP_FILTER } from '@nestjs/core';
+import { AllHttpExceptionFilter } from './exceptions/http-exception.filter';
 
 @Module({
   imports: [
@@ -22,12 +24,19 @@ import { UserEntity } from './users/entities/user.entity';
         password: config.get('DB_PASS'),
         database: config.get('DB_NAME'),
         entities: [UserEntity],
+        logging: ['error'],
         synchronize: false,
       }),
     }),
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllHttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
