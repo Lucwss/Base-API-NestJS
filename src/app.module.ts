@@ -10,6 +10,9 @@ import { UsersModule } from './users/users.module';
 import { UserEntity } from './users/entities/user.entity';
 import { APP_FILTER } from '@nestjs/core';
 import { AllHttpExceptionFilter } from './exceptions/http-exception.filter';
+import { SessionsModule } from './sessions/sessions.module';
+import { SessionEntity } from './sessions/entities/session.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,12 +26,14 @@ import { AllHttpExceptionFilter } from './exceptions/http-exception.filter';
         username: config.get('DB_USER'),
         password: config.get('DB_PASS'),
         database: config.get('DB_NAME'),
-        entities: [UserEntity],
+        entities: [UserEntity, SessionEntity],
         logging: ['error'],
         synchronize: false,
       }),
     }),
     UsersModule,
+    SessionsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
