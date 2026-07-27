@@ -2,11 +2,11 @@ import { HttpStatus } from '@nestjs/common';
 import { IBaseExceptionParams } from './baseInterface';
 import { BaseException } from './baseException';
 
-export class InternalServerErrorException extends BaseException {
+export class UnauthorizedException extends BaseException {
   constructor({
-    message = 'InternalServerError',
+    message = 'Unauthorized',
     action = 'Contact I.T support',
   }: IBaseExceptionParams) {
-    super(message, action, HttpStatus.INTERNAL_SERVER_ERROR);
+    super(message, action, HttpStatus.UNAUTHORIZED);
   }
 }

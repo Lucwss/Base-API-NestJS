@@ -8,10 +8,15 @@ export abstract class BaseException extends HttpException {
     message: string,
     action: string,
     status: HttpStatus,
-    options?: { cause?: Error }
+    options?: { cause?: Error },
   ) {
     super(message, status, options);
     this.action = action;
   }
-  abstract toJSON(): IBaseExceptionParams;
+  toJSON(): IBaseExceptionParams {
+    return {
+      message: this.message,
+      action: this.action,
+    };
+  }
 }
