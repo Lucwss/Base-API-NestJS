@@ -64,7 +64,7 @@ async function waitForAllServices(): Promise<void> {
 
 async function clearDatabase(): Promise<void> {
   await AppDataSource.query(
-    'TRUNCATE TABLE "sessions", "users" RESTART IDENTITY CASCADE',
+    'TRUNCATE TABLE "user_roles", "role_permissions", "roles", "sessions", "users" RESTART IDENTITY CASCADE',
   );
 }
 
