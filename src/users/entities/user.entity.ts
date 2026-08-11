@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { SessionEntity } from '../../sessions/entities/session.entity';
+import { RoleEntity } from '../../admin/entities/role.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -29,6 +31,12 @@ export class UserEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column({ default: false })
+  isSuperuser: boolean;
+
+  @ManyToMany(() => RoleEntity, (role) => role.users)
+  roles: RoleEntity[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created: Date;
