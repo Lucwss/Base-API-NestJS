@@ -1,0 +1,437 @@
+/* Admin UI. Fixed light theme: `color-scheme: light dark` is deliberately
+   omitted, since auto-inversion fights the navy sidebar. */
+
+:root {
+  --navy: #1b2a4a;
+  --navy-hi: #26375c;
+  --navy-dim: #8f9bb3;
+  --cyan: #00b8d4;
+  --blue: #2f6fed;
+  --blue-dark: #2559c9;
+  --page: #f4f6fa;
+  --card: #fff;
+  --line: #e6e9f0;
+  --text: #2b3445;
+  --muted: #8a94a6;
+  --green: #17b26a;
+  --green-bg: #e7f7ef;
+  --red: #e5484d;
+  --red-bg: #fdeced;
+  --radius: 6px;
+  --sidebar-w: 230px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font: 14px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+a { color: var(--blue); }
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar-w);
+  background: var(--navy);
+  overflow-y: auto;
+}
+
+.sidebar__brand {
+  display: block;
+  padding: 18px 20px;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-decoration: none;
+}
+
+.sidebar__section {
+  padding: 18px 20px 8px;
+  color: var(--navy-dim);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .9px;
+  text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 20px;
+  /* Transparent border at the same width as the active one, so the label
+     never shifts horizontally when a section becomes active. */
+  border-left: 3px solid transparent;
+  color: #c9d2e3;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: var(--navy-hi); color: #fff; }
+
+.nav-item--active {
+  background: var(--navy-hi);
+  border-left-color: var(--cyan);
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-item svg { width: 16px; height: 16px; flex: none; }
+
+/* The logout control is a form, but reads as one more nav row. */
+.nav-item--button {
+  width: 100%;
+  background: none;
+  border: 0;
+  border-left: 3px solid transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* ---------- Shell / top bar ---------- */
+
+.shell { margin-left: var(--sidebar-w); }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 22px;
+  height: 56px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar__search {
+  flex: 1;
+  max-width: 420px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.topbar__spacer { flex: 1; }
+
+.topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--navy-hi);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---------- Breadcrumb strip ---------- */
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 22px;
+  height: 46px;
+  background: var(--cyan);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.crumbs a { color: #fff; text-decoration: none; opacity: .85; }
+.crumbs a:hover { opacity: 1; }
+.crumbs__spacer { flex: 1; }
+
+.crumbs__action {
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .18);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.crumbs__action:hover { background: rgba(255, 255, 255, .3); }
+
+/* ---------- Content card ---------- */
+
+main { padding: 22px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.card__title { margin: 0 0 18px; font-size: 21px; font-weight: 600; }
+
+.card__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.card__head .card__title { margin: 0; }
+.card__head-spacer { flex: 1; }
+
+/* ---------- Table ---------- */
+
+.table { width: 100%; border-collapse: collapse; }
+
+.table th,
+.table td {
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  text-align: left;
+  font-size: 13px;
+}
+
+.table th {
+  background: #fafbfc;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: #55607a;
+  white-space: nowrap;
+}
+
+/* Decorative sort affordance — headers are not clickable. */
+.table th.sortable::after {
+  content: "⌃⌄";
+  float: right;
+  margin-left: 8px;
+  font-size: 8px;
+  letter-spacing: -2px;
+  color: var(--muted);
+}
+
+.table tbody tr:hover { background: #fafbfd; }
+.table td.empty { color: var(--muted); text-align: center; padding: 26px; }
+
+.row-actions { display: flex; gap: 6px; white-space: nowrap; }
+
+/* ---------- Badges ---------- */
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 11px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge--yes { background: var(--green-bg); color: var(--green); }
+.badge--no { background: var(--red-bg); color: var(--red); }
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--blue);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover { background: var(--blue-dark); }
+
+.btn--ghost {
+  background: #f0f2f6;
+  color: #4a5468;
+  border: 1px solid var(--line);
+  padding: 5px 13px;
+  font-size: 12px;
+}
+
+.btn--ghost:hover { background: #e6e9f0; }
+
+.btn--danger {
+  background: var(--red);
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.btn--danger:hover { background: #c93a3f; }
+
+.btn--link {
+  background: none;
+  color: var(--muted);
+  padding: 7px 0;
+  text-decoration: underline;
+}
+
+.btn--link:hover { background: none; color: var(--text); }
+
+/* ---------- Pager ---------- */
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.pager__count { color: var(--muted); font-size: 13px; }
+.pager__spacer { flex: 1; }
+
+.pager__page {
+  display: inline-block;
+  min-width: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: #4a5468;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.pager__page:hover { background: #f0f2f6; }
+
+.pager__page--current {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ---------- Forms ---------- */
+
+.field { margin-bottom: 16px; max-width: 520px; }
+
+.field label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Element selectors: form.hbs has no per-input classes, and adding them
+   across all eight widget branches is a bigger diff than this list. */
+input[type=text],
+input[type=password],
+input[type=number],
+input[type=datetime-local],
+select,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, .12);
+}
+
+input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--blue); }
+
+.field .readonly { background: #f4f6fa; color: var(--muted); }
+.hint { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.muted { color: var(--muted); font-size: 13px; }
+
+/* ---------- Login ---------- */
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--navy);
+  padding: 20px;
+}
+
+.login {
+  width: 100%;
+  max-width: 360px;
+  background: var(--card);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .28);
+}
+
+.login__brand {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-align: center;
+}
+
+.login__sub {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.login .field { max-width: none; }
+.login .btn { width: 100%; padding: 9px; text-align: center; }
+.login .actions { border: 0; margin-top: 18px; padding-top: 0; }
+
+.alert {
+  margin-bottom: 16px;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  background: var(--red-bg);
+  color: #a1272b;
+  font-size: 13px;
+}
+
+/* ---------- Narrow screens ----------
+   The sidebar collapses out of the way. No hamburger drawer: that needs JS,
+   and this is a desktop tool. */
+
+@media (max-width: 860px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { display: none; }
+  main { padding: 14px; }
+  .card { padding: 14px; }
+  .table { display: block; overflow-x: auto; }
+}

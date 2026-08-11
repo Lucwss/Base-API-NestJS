@@ -1,0 +1,34 @@
+<div class="crumbs">
+  <span>Dashboard / Overview</span>
+</div>
+
+<main>
+  <div class="card">
+    <h1 class="card__title">Site administration</h1>
+
+    {{#if navItems.length}}
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="sortable">Section</th>
+            <th class="sortable">Table</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each navItems}}
+            <tr>
+              <td><a href="/admin/{{this.slug}}">{{this.label}}</a></td>
+              <td class="muted">{{this.tableName}}</td>
+              <td class="row-actions">
+                <a class="btn btn--ghost" href="/admin/{{this.slug}}">Details</a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <p class="muted">You do not have permission to view any section.</p>
+    {{/if}}
+  </div>
+</main>

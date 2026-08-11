@@ -10,6 +10,9 @@ import { AllHttpExceptionFilter } from './exceptions/http-exception.filter';
 import { SessionsModule } from './sessions/sessions.module';
 import { SessionEntity } from './sessions/entities/session.entity';
 import { AuthModule } from './auth/auth.module';
+import { AdminModule } from './admin/admin.module';
+import { RoleEntity } from './admin/entities/role.entity';
+import { RolePermissionEntity } from './admin/entities/role-permission.entity';
 
 @Module({
   imports: [
@@ -23,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
         username: config.get('DB_USER'),
         password: config.get('DB_PASS'),
         database: config.get('DB_NAME'),
-        entities: [UserEntity, SessionEntity],
+        entities: [UserEntity, SessionEntity, RoleEntity, RolePermissionEntity],
         logging: ['error'],
         synchronize: false,
       }),
@@ -31,6 +34,7 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     SessionsModule,
     AuthModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [

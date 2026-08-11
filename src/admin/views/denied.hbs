@@ -1,0 +1,18 @@
+<div class="login">
+  <h1 class="login__brand">{{brand}}</h1>
+  <p class="login__sub">Access denied</p>
+
+  <p class="alert">
+    You do not have permission to access this area.
+    Ask an administrator to grant you access.
+  </p>
+
+  <p class="muted" style="text-align:center">Signed in as {{deniedUser}}</p>
+
+  <form method="post" action="/admin/logout">
+    <input type="hidden" name="{{csrfField}}" value="{{csrfToken}}" />
+    <div class="actions">
+      <button type="submit" class="btn">Log out</button>
+    </div>
+  </form>
+</div>

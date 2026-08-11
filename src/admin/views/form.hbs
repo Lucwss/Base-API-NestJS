@@ -1,0 +1,69 @@
+<div class="crumbs">
+  <a href="/admin">Dashboard</a>
+  <a href="/admin/{{info.slug}}">/ {{info.label}}</a>
+  <span>/ {{#if isCreate}}Add{{else}}Edit{{/if}}</span>
+</div>
+
+<main>
+  <div class="card">
+    <h1 class="card__title">
+      {{#if isCreate}}Add {{info.label}}{{else}}Edit {{info.label}}{{/if}}
+    </h1>
+
+    <form method="post"
+          action="{{#if isCreate}}/admin/{{info.slug}}/add{{else}}/admin/{{info.slug}}/{{recordId}}{{/if}}">
+      <input type="hidden" name="{{csrfField}}" value="{{csrfToken}}" />
+
+      {{#each fields}}
+        <div class="field">
+          <label for="f_{{this.name}}">{{this.label}}</label>
+
+          {{#if this.readOnly}}
+            <input id="f_{{this.name}}" class="readonly" type="text"
+                   value="{{this.value}}" readonly disabled />
+
+          {{else if this.isCheckbox}}
+            <input id="f_{{this.name}}" type="checkbox" name="{{this.name}}"
+                   {{#if this.checked}}checked{{/if}} />
+
+          {{else if this.isSelect}}
+            <select id="f_{{this.name}}" name="{{this.name}}">
+              {{#each this.options}}
+                <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+
+          {{else if this.isTextarea}}
+            <textarea id="f_{{this.name}}" name="{{this.name}}"
+                      rows="4" {{#if this.required}}required{{/if}}>{{this.value}}</textarea>
+
+          {{else if this.isPassword}}
+            <input id="f_{{this.name}}" type="password" name="{{this.name}}"
+                   autocomplete="new-password"
+                   {{#if this.required}}required{{/if}} />
+            <span class="hint">Leave blank to keep the current password.</span>
+
+          {{else if this.isNumber}}
+            <input id="f_{{this.name}}" type="number" name="{{this.name}}"
+                   value="{{this.value}}" {{#if this.required}}required{{/if}} />
+
+          {{else if this.isDatetime}}
+            <input id="f_{{this.name}}" type="datetime-local" name="{{this.name}}"
+                   value="{{this.value}}" />
+
+          {{else}}
+            <input id="f_{{this.name}}" type="text" name="{{this.name}}"
+                   value="{{this.value}}"
+                   {{#if this.maxLength}}maxlength="{{this.maxLength}}"{{/if}}
+                   {{#if this.required}}required{{/if}} />
+          {{/if}}
+        </div>
+      {{/each}}
+
+      <div class="actions">
+        <button type="submit" class="btn">Save</button>
+        <a class="btn btn--link" href="/admin/{{info.slug}}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</main>

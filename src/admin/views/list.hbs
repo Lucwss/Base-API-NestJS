@@ -1,0 +1,67 @@
+<div class="crumbs">
+  <a href="/admin">Dashboard</a>
+  <span>/ {{info.label}} / Overview</span>
+  <div class="crumbs__spacer"></div>
+  <a class="crumbs__action" href="/admin/{{info.slug}}/add">+ Add {{info.label}}</a>
+</div>
+
+<main>
+  <div class="card">
+    <h1 class="card__title">Manage {{info.label}} of your Application</h1>
+
+    <table class="table">
+      <thead>
+        <tr>
+          {{#each columns}}<th class="sortable">{{this.label}}</th>{{/each}}
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rows}}
+          <tr>
+            {{#each this.cells}}
+              <td>
+                {{#if this.isBool}}
+                  <span class="badge {{#if this.on}}badge--yes{{else}}badge--no{{/if}}">
+                    {{#if this.on}}Yes{{else}}No{{/if}}
+                  </span>
+                {{else}}
+                  {{this.text}}
+                {{/if}}
+              </td>
+            {{/each}}
+            <td>
+              <div class="row-actions">
+                <a class="btn btn--ghost"
+                   href="/admin/{{../info.slug}}/{{this.id}}">Details</a>
+                <form method="post"
+                      action="/admin/{{../info.slug}}/{{this.id}}/delete"
+                      onsubmit="return confirm('Delete this record?')">
+                  <input type="hidden" name="{{../csrfField}}" value="{{../csrfToken}}" />
+                  <button type="submit" class="btn btn--danger"
+                          aria-label="Delete">&#10005;</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {{else}}
+          <tr><td class="empty" colspan="99">No records.</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <nav class="pager">
+      <span class="pager__count">
+        Showing {{from}} - {{to}} from {{total}}
+      </span>
+      <div class="pager__spacer"></div>
+      {{#if hasPrev}}
+        <a class="pager__page" href="/admin/{{info.slug}}?page={{prevPage}}">Prev</a>
+      {{/if}}
+      <span class="pager__page pager__page--current">{{page}}</span>
+      {{#if hasNext}}
+        <a class="pager__page" href="/admin/{{info.slug}}?page={{nextPage}}">Next</a>
+      {{/if}}
+    </nav>
+  </div>
+</main>

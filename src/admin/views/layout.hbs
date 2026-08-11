@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{brand}}</title>
+    <link rel="stylesheet" href="/admin/static/admin.css" />
+  </head>
+  <body>
+    {{#if currentUser}}
+      <aside class="sidebar">
+        <a class="sidebar__brand" href="/admin">{{brand}}</a>
+
+        <div class="sidebar__section">Main menu</div>
+        {{#each navItems}}
+          <a class="nav-item {{#if this.active}}nav-item--active{{/if}}"
+             href="/admin/{{this.slug}}">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <rect x="1" y="2" width="14" height="3" rx="1" />
+              <rect x="1" y="6.5" width="14" height="3" rx="1" />
+              <rect x="1" y="11" width="14" height="3" rx="1" />
+            </svg>
+            {{this.label}}
+          </a>
+        {{/each}}
+
+        <div class="sidebar__section">Options</div>
+        <form method="post" action="/admin/logout">
+          <input type="hidden" name="{{csrfField}}" value="{{csrfToken}}" />
+          <button type="submit" class="nav-item nav-item--button">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M6 1h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6v-2h6V3H6z" />
+              <path d="M7.5 8 4 4.7v2.05H1v2.5h3v2.05z" />
+            </svg>
+            Log out
+          </button>
+        </form>
+      </aside>
+
+      <div class="shell">
+        <div class="topbar">
+          <input class="topbar__search" type="search" placeholder="Search…"
+                 aria-label="Search" />
+          <div class="topbar__spacer"></div>
+          <div class="topbar__user">
+            <div class="avatar" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+                <circle cx="8" cy="5" r="3" />
+                <path d="M2 15a6 6 0 0 1 12 0z" />
+              </svg>
+            </div>
+            <span>{{currentUser}}{{#if isSuperuser}} · superuser{{/if}}</span>
+          </div>
+        </div>
+
+        {{{body}}}
+      </div>
+    {{else}}
+      <div class="login-page">{{{body}}}</div>
+    {{/if}}
+  </body>
+</html>

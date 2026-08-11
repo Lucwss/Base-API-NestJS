@@ -8,5 +8,6 @@ import { SessionsModule } from '../sessions/sessions.module';
   imports: [UsersModule, SessionsModule],
   controllers: [AuthController],
   providers: [AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}

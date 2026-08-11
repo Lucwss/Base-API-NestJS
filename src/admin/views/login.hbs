@@ -1,0 +1,27 @@
+<div class="login">
+  <h1 class="login__brand">{{brand}}</h1>
+  <p class="login__sub">Sign in to continue</p>
+
+  {{#if error}}
+    <p class="alert">{{error}}</p>
+  {{/if}}
+
+  <form method="post" action="/admin/login">
+    <input type="hidden" name="{{csrfField}}" value="{{csrfToken}}" />
+    <input type="hidden" name="next" value="{{next}}" />
+
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autofocus required />
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn">Log in</button>
+    </div>
+  </form>
+</div>
